@@ -26,6 +26,9 @@ public:
    int getScale() { return scale; }
    glm::vec2 getPosition() { return position; }
    glm::vec2 getVelocity() { return velocity; }
+   void setVelocity(float x, float y);
+   void setVelocityX(float x) { velocity.x = x; }
+   void setVelocityY(float y) { velocity.y = y; }
 };
 
 #endif

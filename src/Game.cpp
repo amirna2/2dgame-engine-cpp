@@ -5,6 +5,8 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "../lib/glm/glm.hpp"
+#include "./components/include/KeyboardControlComponent.h"
+#include "./components/include/SpriteComponent.h"
 #include "./components/include/TransformComponent.h"
 #include "./include/AssetManager.h"
 #include "./include/Constants.h"
@@ -48,37 +50,40 @@ void Game::initialize(int width, int height) {
 
    assetManager = new AssetManager(&manager);
 
+   event = SDL_Event();
+
    loadLevel(0);
 
    running = true;
 }
 
 void Game::loadLevel(int level) {
-   Entity& projectile1(manager.addEntity("projectile1"));
-   projectile1.addComponent<TransformComponent>(0, 0, 2, 2, 32, 32, 1);
-   Entity& projectile2(manager.addEntity("projectile2"));
-   projectile2.addComponent<TransformComponent>(100, 100, 1, 0, 10, 10, 1);
-   Entity& projectile3(manager.addEntity("projectile3"));
-   projectile3.addComponent<TransformComponent>(400, 400, -1, -1, 32, 5, 1);
-}
+   /* Start including new assets to the assetmanager list */
+   assetManager->addTexture(
+       "tank-image", std::string("./assets/images/tank-big-right.png").c_str());
+   assetManager->addTexture(
+       "chopper-image",
+       std::string("./assets/images/chopper-spritesheet.png").c_str());
+   assetManager->addTexture("radar-image",
+                            std::string("./assets/images/radar.png").c_str());
 
-void Game::processInput() {
-   SDL_Event event;
-   SDL_PollEvent(&event);
-   switch (event.type) {
-      case SDL_QUIT: {
-         running = false;
-         break;
-      }
-      case SDL_KEYDOWN: {
-         if (event.key.keysym.sym == SDLK_ESCAPE) {
-            running = false;
-         }
-      }
-      default: {
-         break;
-      }
-   }
+   /* Start including entities and also components to them */
+   Entity& chopperEntity(manager.addEntity("chopper"));
+   chopperEntity.addComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+   chopperEntity.addComponent<SpriteComponent>("chopper-image", 2, 90, true,
+                                               false);
+
+   chopperEntity.addComponent<KeyboardControlComponent>("up", "right", "down",
+                                                        "left", "space");
+
+   Entity& tankEntity(manager.addEntity("tank"));
+   tankEntity.addComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+   tankEntity.addComponent<SpriteComponent>("tank-image");
+
+   Entity& radarEntity(manager.addEntity("Radar"));
+   radarEntity.addComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+   radarEntity.addComponent<SpriteComponent>("radar-image", 8, 150, false,
+                                             true);
 }
 
 void Game::update() {
@@ -120,8 +125,28 @@ void Game::destroy() {
    instance = 0;
 }
 
+void Game::processInput() {
+   SDL_PollEvent(&event);
+   switch (event.type) {
+      case SDL_QUIT: {
+         running = false;
+         break;
+      }
+      case SDL_KEYDOWN: {
+         if (event.key.keysym.sym == SDLK_ESCAPE) {
+            running = false;
+         }
+      }
+      default: {
+         break;
+      }
+   }
+}
+
 bool Game::isRunning() const { return running; }
 
 SDL_Renderer* Game::getRenderer() { return renderer; }
 
 AssetManager* Game::getAssetManger() { return assetManager; }
+
+SDL_Event Game::getEvent() { return event; }

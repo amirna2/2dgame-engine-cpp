@@ -25,6 +25,7 @@ public:
    void render();
    void destroy();
    bool isAcvtive() const;
+   void listAllComponents() const;
 
    template <typename T, typename... Targs> T& addComponent(Targs&&... args) {
       T* newComponent(new T(forward<Targs>(args)...));

@@ -16,6 +16,7 @@ private:
    SDL_Window* window;
    int ticksLastFrame;
    SDL_Renderer* renderer;
+   SDL_Event event;
    AssetManager* assetManager;
 
 public:
@@ -28,6 +29,7 @@ public:
    void render();
    void destroy();
    SDL_Renderer* getRenderer();
+   SDL_Event getEvent();
    AssetManager* getAssetManger();
 };
 

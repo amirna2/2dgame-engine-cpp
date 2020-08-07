@@ -12,6 +12,11 @@ TransformComponent::TransformComponent(int posX, int posY, int velX, int velY,
    scale = s;
 }
 
+void TransformComponent::setVelocity(float x, float y) {
+   velocity.x = x;
+   velocity.y = y;
+}
+
 void TransformComponent::update(float deltaTime) {
    position.x += velocity.x * deltaTime;
    position.y += velocity.y * deltaTime;
@@ -19,10 +24,4 @@ void TransformComponent::update(float deltaTime) {
 
 void TransformComponent::initialize() {}
 
-void TransformComponent::render() {
-   SDL_Rect transformRectangle = {(int)position.x, (int)position.y, width,
-                                  height};
-   Game* game = Game::getInstance();
-   SDL_SetRenderDrawColor(game->getRenderer(), 255, 255, 255, 255);
-   SDL_RenderFillRect(game->getRenderer(), &transformRectangle);
-}
+void TransformComponent::render() {}
