@@ -9,6 +9,7 @@
 using namespace std;
 
 class AssetManager {
+
 private:
    EntityManager* manager;
    map<string, SDL_Texture*> textures;
@@ -18,7 +19,7 @@ public:
    ~AssetManager();
    void clearData();
    void addTexture(string textureId, const char* fileName);
-   SDL_Texture GetTexture(std::string textureId);
+   SDL_Texture* getTexture(std::string textureId);
 };
 
 #endif

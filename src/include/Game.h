@@ -4,15 +4,19 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+class AssetManager;
+
 class Game {
 private:
    static Game* instance;
+   Game();
+   ~Game();
+
    bool running;
    SDL_Window* window;
    int ticksLastFrame;
-   Game();
-   ~Game();
    SDL_Renderer* renderer;
+   AssetManager* assetManager;
 
 public:
    static Game* getInstance();
@@ -24,6 +28,7 @@ public:
    void render();
    void destroy();
    SDL_Renderer* getRenderer();
+   AssetManager* getAssetManger();
 };
 
 #endif

@@ -2,6 +2,7 @@ build:
 	g++ -w -std=c++14 -Wfatal-errors \
 	./src/*.cpp ./src/components/*.cpp \
 	-o game \
+        -I"./src/include" \
 	-I"./lib/lua" \
 	-L"./lib/lua" \
 	-llua \

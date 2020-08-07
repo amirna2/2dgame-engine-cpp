@@ -20,6 +20,12 @@ public:
    void initialize() override;
    void update(float deltaTime) override;
    void render() override;
+
+   int getWidth() { return width; }
+   int getHeight() { return height; }
+   int getScale() { return scale; }
+   glm::vec2 getPosition() { return position; }
+   glm::vec2 getVelocity() { return velocity; }
 };
 
 #endif

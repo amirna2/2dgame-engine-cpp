@@ -1,7 +1,7 @@
 #ifndef TEXTUREMANAHGER_H
 #define TEXTUREMANAHGER_H
 
-#include "./include/Game.h"
+#include "Game.h"
 
 class TextureManager {
 public:

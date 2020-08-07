@@ -6,6 +6,7 @@
 
 #include "../lib/glm/glm.hpp"
 #include "./components/include/TransformComponent.h"
+#include "./include/AssetManager.h"
 #include "./include/Constants.h"
 #include "./include/EntityManager.h"
 #include "./include/Game.h"
@@ -44,6 +45,9 @@ void Game::initialize(int width, int height) {
       std::cerr << "Error creating SDL renderer" << std::endl;
       return;
    }
+
+   assetManager = new AssetManager(&manager);
+
    loadLevel(0);
 
    running = true;
@@ -119,3 +123,5 @@ void Game::destroy() {
 bool Game::isRunning() const { return running; }
 
 SDL_Renderer* Game::getRenderer() { return renderer; }
+
+AssetManager* Game::getAssetManger() { return assetManager; }
