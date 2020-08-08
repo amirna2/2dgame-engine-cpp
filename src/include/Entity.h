@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 
+#include "../components/include/Component.h"
+#include "./Constants.h"
+#include "./EntityManager.h"
+
 class Component;
 class EntityManager;
 
@@ -16,16 +20,19 @@ private:
    bool active;
    vector<Component*> components;
    map<const type_info*, Component*> componentTypeMap;
+   LayerType layer;
 
 public:
    string name;
    Entity(EntityManager& manager);
    Entity(EntityManager& manager, string name);
+   Entity(EntityManager& manager, string name, LayerType layer);
    void update(float deltaTime);
    void render();
    void destroy();
    bool isAcvtive() const;
    void listAllComponents() const;
+   LayerType getLayerType() { return layer; }
 
    template <typename T, typename... Targs> T& addComponent(Targs&&... args) {
       T* newComponent(new T(forward<Targs>(args)...));

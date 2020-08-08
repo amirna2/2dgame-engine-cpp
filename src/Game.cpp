@@ -12,8 +12,7 @@
 #include "./include/Constants.h"
 #include "./include/EntityManager.h"
 #include "./include/Game.h"
-
-EntityManager manager;
+#include "./include/Map.h"
 
 Game* Game::instance = 0;
 
@@ -26,7 +25,11 @@ Game* Game::getInstance() {
 
 Game::Game() { this->running = false; }
 
-Game::~Game() {}
+Game::~Game() {
+   delete assetManager;
+   delete entityManager;
+   delete map;
+}
 
 void Game::initialize(int width, int height) {
    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -47,8 +50,8 @@ void Game::initialize(int width, int height) {
       std::cerr << "Error creating SDL renderer" << std::endl;
       return;
    }
-
-   assetManager = new AssetManager(&manager);
+   entityManager = new EntityManager();
+   assetManager = new AssetManager(entityManager);
 
    event = SDL_Event();
 
@@ -58,6 +61,8 @@ void Game::initialize(int width, int height) {
 }
 
 void Game::loadLevel(int level) {
+   EntityManager* manager = getEntityManger();
+
    /* Start including new assets to the assetmanager list */
    assetManager->addTexture(
        "tank-image", std::string("./assets/images/tank-big-right.png").c_str());
@@ -67,20 +72,23 @@ void Game::loadLevel(int level) {
    assetManager->addTexture("radar-image",
                             std::string("./assets/images/radar.png").c_str());
 
-   /* Start including entities and also components to them */
-   Entity& chopperEntity(manager.addEntity("chopper"));
-   chopperEntity.addComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-   chopperEntity.addComponent<SpriteComponent>("chopper-image", 2, 90, true,
-                                               false);
+   map = new Map("jungle-tiletexture", 2, 32);
+   map->loadMap("./assets/tilemaps/jungle.map", 25, 20);
 
-   chopperEntity.addComponent<KeyboardControlComponent>("up", "right", "down",
-                                                        "left", "space");
+   /* Start including entities and also add components to them */
+   Entity& player(manager->addEntity("chopper", PLAYER_LAYER));
 
-   Entity& tankEntity(manager.addEntity("tank"));
+   player.addComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+   player.addComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+   player.addComponent<KeyboardControlComponent>("up", "right", "down", "left",
+                                                 "space");
+
+   Entity& tankEntity(manager->addEntity("tank", ENEMY_LAYER));
+
    tankEntity.addComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
    tankEntity.addComponent<SpriteComponent>("tank-image");
 
-   Entity& radarEntity(manager.addEntity("Radar"));
+   Entity& radarEntity(manager->addEntity("Radar", UI_LAYER));
    radarEntity.addComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
    radarEntity.addComponent<SpriteComponent>("radar-image", 8, 150, false,
                                              true);
@@ -99,7 +107,7 @@ void Game::update() {
    ticksLastFrame = SDL_GetTicks();
 
    // update all our entities
-   manager.update(deltaTime);
+   entityManager->update(deltaTime);
 }
 
 void Game::render() {
@@ -107,10 +115,10 @@ void Game::render() {
    SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
    SDL_RenderClear(renderer);
 
-   if (manager.hasNoEntities()) {
+   if (entityManager->hasNoEntities()) {
       return;
    }
-   manager.render();
+   entityManager->render();
 
    // Now we flip the buffers
    SDL_RenderPresent(renderer);
@@ -148,5 +156,6 @@ bool Game::isRunning() const { return running; }
 SDL_Renderer* Game::getRenderer() { return renderer; }
 
 AssetManager* Game::getAssetManger() { return assetManager; }
+EntityManager* Game::getEntityManger() { return entityManager; }
 
 SDL_Event Game::getEvent() { return event; }

@@ -13,6 +13,14 @@ Entity::Entity(EntityManager& manager, string name) : manager(manager) {
    this->name = name;
 }
 
+Entity::Entity(EntityManager& manager, string name, LayerType layer)
+    : manager(manager) {
+   this->manager = manager;
+   this->active = true;
+   this->name = name;
+   this->layer = layer;
+}
+
 void Entity::update(float deltaTime) {
    for (auto& component : components) {
       component->update(deltaTime);

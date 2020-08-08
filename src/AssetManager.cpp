@@ -4,6 +4,8 @@ using namespace std;
 
 AssetManager::AssetManager(EntityManager* manager) : manager(manager) {}
 
+AssetManager::~AssetManager() {}
+
 void AssetManager::clearData() { textures.clear(); }
 
 void AssetManager::addTexture(string textureId, const char* filePath) {

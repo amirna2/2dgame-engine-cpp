@@ -5,6 +5,9 @@
 #include <SDL2/SDL_ttf.h>
 
 class AssetManager;
+class EntityManager;
+
+class Map;
 
 class Game {
 private:
@@ -18,6 +21,8 @@ private:
    SDL_Renderer* renderer;
    SDL_Event event;
    AssetManager* assetManager;
+   EntityManager* entityManager;
+   Map* map;
 
 public:
    static Game* getInstance();
@@ -31,6 +36,7 @@ public:
    SDL_Renderer* getRenderer();
    SDL_Event getEvent();
    AssetManager* getAssetManger();
+   EntityManager* getEntityManger();
 };
 
 #endif

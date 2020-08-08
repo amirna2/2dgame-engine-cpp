@@ -1,11 +1,12 @@
 #ifndef ENTITY_MANAGER_H
 #define ENTITY_MANAGER_H
 
+#include "Constants.h"
+#include "Entity.h"
 #include <vector>
 
 using namespace std;
 
-class Entity;
 class Component;
 
 class EntityManager {
@@ -16,10 +17,15 @@ public:
    void clearData();
    void update(float deltaTime);
    void render();
+
    bool hasNoEntities();
-   Entity& addEntity(string name);
    vector<Entity*> getEntities() const;
    unsigned int getEntityCount();
+   void listAllEntities() const;
+
+   Entity& addEntity(string name);
+   Entity& addEntity(string entityName, LayerType layer);
+   vector<Entity*> getEntitiesByLayer(LayerType layer) const;
 };
 
 #endif

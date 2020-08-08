@@ -1,6 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
-#include "../../include/Entity.h"
+
+class Entity;
 
 class Component {
 public:
