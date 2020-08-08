@@ -14,6 +14,8 @@
 #include "./include/Game.h"
 #include "./include/Map.h"
 
+using namespace std;
+
 Game* Game::instance = 0;
 
 Game* Game::getInstance() {
@@ -65,12 +67,17 @@ void Game::loadLevel(int level) {
 
    /* Start including new assets to the assetmanager list */
    assetManager->addTexture(
-       "tank-image", std::string("./assets/images/tank-big-right.png").c_str());
+       "tank-image", string("./assets/images/tank-big-right.png").c_str());
+
    assetManager->addTexture(
        "chopper-image",
-       std::string("./assets/images/chopper-spritesheet.png").c_str());
+       string("./assets/images/chopper-spritesheet.png").c_str());
+
    assetManager->addTexture("radar-image",
-                            std::string("./assets/images/radar.png").c_str());
+                            string("./assets/images/radar.png").c_str());
+
+   assetManager->addTexture("jungle-tiletexture",
+                            string("./assets/tilemaps/jungle.png").c_str());
 
    map = new Map("jungle-tiletexture", 2, 32);
    map->loadMap("./assets/tilemaps/jungle.map", 25, 20);
@@ -92,6 +99,7 @@ void Game::loadLevel(int level) {
    radarEntity.addComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
    radarEntity.addComponent<SpriteComponent>("radar-image", 8, 150, false,
                                              true);
+   // manager->listAllEntities();
 }
 
 void Game::update() {
