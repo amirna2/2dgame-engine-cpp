@@ -4,6 +4,13 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "../../lib/glm/glm.hpp"
+
+#include "AssetManager.h"
+#include "Constants.h"
+#include "EntityManager.h"
+#include "Map.h"
+
 class AssetManager;
 class EntityManager;
 
@@ -23,6 +30,9 @@ private:
    AssetManager* assetManager;
    EntityManager* entityManager;
    Map* map;
+   SDL_Rect camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+   void handleCameraMovement();
+   Entity* player;
 
 public:
    static Game* getInstance();
@@ -37,6 +47,7 @@ public:
    SDL_Event getEvent();
    AssetManager* getAssetManger();
    EntityManager* getEntityManger();
+   SDL_Rect getCamera() { return camera; }
 };
 
 #endif

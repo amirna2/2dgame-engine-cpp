@@ -1,18 +1,8 @@
-#include <iostream>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-
-#include "../lib/glm/glm.hpp"
+#include "./include/Game.h"
 #include "./components/include/KeyboardControlComponent.h"
 #include "./components/include/SpriteComponent.h"
 #include "./components/include/TransformComponent.h"
-#include "./include/AssetManager.h"
-#include "./include/Constants.h"
-#include "./include/EntityManager.h"
-#include "./include/Game.h"
-#include "./include/Map.h"
+#include <iostream>
 
 using namespace std;
 
@@ -62,10 +52,22 @@ void Game::initialize(int width, int height) {
    running = true;
 }
 
+void Game::handleCameraMovement() {
+   TransformComponent* mainPlayerTransform =
+       player->getComponent<TransformComponent>();
+
+   camera.x = mainPlayerTransform->getPosition().x - (WINDOW_WIDTH / 2);
+   camera.y = mainPlayerTransform->getPosition().y - (WINDOW_HEIGHT / 2);
+
+   camera.x = camera.x < 0 ? 0 : camera.x;
+   camera.y = camera.y < 0 ? 0 : camera.y;
+   camera.x = camera.x > camera.w ? camera.w : camera.x;
+   camera.y = camera.y > camera.h ? camera.h : camera.y;
+}
+
 void Game::loadLevel(int level) {
    EntityManager* manager = getEntityManger();
 
-   /* Start including new assets to the assetmanager list */
    assetManager->addTexture(
        "tank-image", string("./assets/images/tank-big-right.png").c_str());
 
@@ -82,13 +84,11 @@ void Game::loadLevel(int level) {
    map = new Map("jungle-tiletexture", 2, 32);
    map->loadMap("./assets/tilemaps/jungle.map", 25, 20);
 
-   /* Start including entities and also add components to them */
-   Entity& player(manager->addEntity("chopper", PLAYER_LAYER));
-
-   player.addComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-   player.addComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
-   player.addComponent<KeyboardControlComponent>("up", "right", "down", "left",
-                                                 "space");
+   player = &(manager->addEntity("chopper", PLAYER_LAYER));
+   player->addComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+   player->addComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+   player->addComponent<KeyboardControlComponent>("up", "right", "down", "left",
+                                                  "space");
 
    Entity& tankEntity(manager->addEntity("tank", ENEMY_LAYER));
 
@@ -116,6 +116,7 @@ void Game::update() {
 
    // update all our entities
    entityManager->update(deltaTime);
+   handleCameraMovement();
 }
 
 void Game::render() {

@@ -40,20 +40,20 @@ void KeyboardControlComponent::update(float deltaTime) {
       string keyCode =
           to_string(Game::getInstance()->getEvent().key.keysym.sym);
       if (keyCode.compare(upKey) == 0) {
-         transform->setVelocity(0, -25);
+         transform->setVelocity(0, -10);
 
          sprite->play("UpAnimation");
       }
       if (keyCode.compare(rightKey) == 0) {
-         transform->setVelocity(25, 0);
+         transform->setVelocity(10, 0);
          sprite->play("RightAnimation");
       }
       if (keyCode.compare(downKey) == 0) {
-         transform->setVelocity(0, 25);
+         transform->setVelocity(0, 10);
          sprite->play("DownAnimation");
       }
       if (keyCode.compare(leftKey) == 0) {
-         transform->setVelocity(-25, 0);
+         transform->setVelocity(-10, 0);
          sprite->play("LeftAnimation");
       }
       if (keyCode.compare(shootKey) == 0) {

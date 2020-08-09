@@ -23,8 +23,9 @@ TileComponent::TileComponent(int sourceRectX, int sourceRectY, int x, int y,
 TileComponent::~TileComponent() { SDL_DestroyTexture(texture); }
 
 void TileComponent::update(float deltaTime) {
-   // destRectangle.x = position.x - Game::camera.x;
-   // destRectangle.y = position.y - Game::camera.y;
+   SDL_Rect camera = Game::getInstance()->getCamera();
+   destRectangle.x = position.x - camera.x;
+   destRectangle.y = position.y - camera.y;
 }
 
 void TileComponent::render() {
